@@ -1,5 +1,6 @@
 package com.lxdevelop.peliculas.configuration;
 
+import com.lxdevelop.peliculas.enums.VideoFormat;
 import com.lxdevelop.peliculas.model.Video;
 import com.lxdevelop.peliculas.repository.VideoRepository;
 import jakarta.annotation.PostConstruct;
@@ -23,8 +24,7 @@ public class DataInitializer {
     public void init() {
         File mediaDir = new File("./media");
         if (mediaDir.exists() && mediaDir.isDirectory()) {
-            File[] files = mediaDir.listFiles((dir, name) -> name.endsWith(".mp4") || name.endsWith(".mkv") || name.endsWith(".flv"));
-            if (files != null) {
+            File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));            if (files != null) {
                 for (File file : files) {
                     String fileName = file.getName();
                     String filePath = Paths.get(file.getAbsolutePath()).normalize().toString();
