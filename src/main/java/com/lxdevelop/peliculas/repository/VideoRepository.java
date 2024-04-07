@@ -9,4 +9,6 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     boolean existsByNameAndPath(String name, String path);
 
+    boolean findByName(String name);
+
 }
