@@ -8,7 +8,7 @@ group = 'com.lxdevelop'
 version = '0.0.1'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '17'
 }
 
 configurations {
