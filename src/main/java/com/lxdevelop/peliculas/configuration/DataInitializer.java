@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 @Component
@@ -19,21 +23,37 @@ public class DataInitializer {
 
     @Autowired
     VideoRepository videoRepository;
+    public static final File mediaDir = new File("./media");
 
     @PostConstruct
     public void init() {
-        File mediaDir = new File("./media");
         if (mediaDir.exists() && mediaDir.isDirectory()) {
-            File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));            if (files != null) {
+            File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));
+            if (files != null) {
                 for (File file : files) {
                     String fileName = file.getName();
                     String filePath = Paths.get(file.getAbsolutePath()).normalize().toString();
-                    Video video = new Video();
-                    video.setName(fileName);
-                    video.setPath(filePath);
-                    videoRepository.save(video);
+                    if (!videoRepository.existsByNameAndPath(fileName, filePath)) {
+                        Video video = new Video();
+                        video.setName(fileName);
+                        video.setPath(filePath);
+                        videoRepository.save(video);
+                    }
                 }
             }
         }
+    }
+    @PostConstruct
+    public void eliminarVideosNoEncontrados() {
+        File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));
+        if (files == null) return;
+        Set<String> nombresArchivos = Arrays.stream(files)
+                .map(File::getName)
+                .collect(Collectors.toSet());
+        List<Video> todosLosVideos = videoRepository.findAll();
+        List<Video> videosAEliminar = todosLosVideos.stream()
+                .filter(video -> !nombresArchivos.contains(video.getName()))
+                .toList();
+        videoRepository.deleteAll(videosAEliminar);
     }
 }
