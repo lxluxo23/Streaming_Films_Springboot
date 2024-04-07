@@ -4,9 +4,12 @@ import com.lxdevelop.peliculas.enums.VideoFormat;
 import com.lxdevelop.peliculas.model.Video;
 import com.lxdevelop.peliculas.repository.VideoRepository;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -19,11 +22,21 @@ import java.util.stream.Collectors;
 @Configuration
 @Component
 @Profile("dev")
+
 public class DataInitializer {
 
     @Autowired
     VideoRepository videoRepository;
     public static final File mediaDir = new File("./media");
+
+    private static final Logger log  = LoggerFactory.getLogger(DataInitializer.class);
+
+    @Scheduled(fixedRate = 30000)
+    public void verificarYActualizarBaseDeDatos() {
+        log.info("Verificando y actualizando base de datos");
+        init();
+        eliminarVideosNoEncontrados();
+    }
 
     @PostConstruct
     public void init() {
