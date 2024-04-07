@@ -1,5 +1,6 @@
 package com.lxdevelop.peliculas.controller;
 
+import com.lxdevelop.peliculas.enums.Codec;
 import com.lxdevelop.peliculas.model.Video;
 import com.lxdevelop.peliculas.service.VideoService;
 import com.lxdevelop.peliculas.service.VideoStreamingService;
@@ -23,12 +24,13 @@ public class StreamController {
 
 
     @GetMapping("/stream/{videoId}")
-    public ResponseEntity<StreamingResponseBody> livestream(@PathVariable Long videoId) {
+    public ResponseEntity<StreamingResponseBody> livestream(@PathVariable Long videoId,@RequestParam(required = false)  String codec) {
         Video video = videoService.findVideoById(videoId);
         if (video != null) {
+            Codec codecEnum = Codec.fromString(codec);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(outputStream -> videoStreamingService.streamVideo(video.getPath(), outputStream));
+                    .body(outputStream -> videoStreamingService.streamVideo(video.getPath(), outputStream,codecEnum));
         }
         return ResponseEntity.notFound().build();
     }
