@@ -3,6 +3,8 @@ package com.lxdevelop.peliculas.configuration;
 import com.lxdevelop.peliculas.enums.VideoFormat;
 import com.lxdevelop.peliculas.model.Video;
 import com.lxdevelop.peliculas.repository.VideoRepository;
+import com.lxdevelop.peliculas.service.MovieCoverService;
+import com.lxdevelop.peliculas.utils.CovertGenerate;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +29,20 @@ public class DataInitializer {
 
     @Autowired
     VideoRepository videoRepository;
+    @Autowired
+    MovieCoverService movieCoverService;
+    @Autowired
+    CovertGenerate covertGenerate;
     public static final File mediaDir = new File("./media");
 
-    private static final Logger log  = LoggerFactory.getLogger(DataInitializer.class);
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     @Scheduled(fixedRate = 30000)
     public void verificarYActualizarBaseDeDatos() {
         log.info("Verificando y actualizando base de datos");
         init();
         eliminarVideosNoEncontrados();
+
     }
 
     @PostConstruct
@@ -56,6 +63,7 @@ public class DataInitializer {
             }
         }
     }
+
     @PostConstruct
     public void eliminarVideosNoEncontrados() {
         File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));
@@ -68,5 +76,31 @@ public class DataInitializer {
                 .filter(video -> !nombresArchivos.contains(video.getName()))
                 .toList();
         videoRepository.deleteAll(videosAEliminar);
+    }
+
+
+    @Scheduled(cron = "0 * * * * ?")
+    public void fetchMovieCovers() {
+        log.info(" [ Generando covers ] ");
+        List<Video> videos = videoRepository.findAll();
+        for (Video video : videos) {
+            String movieName = video.getName().replace(".mp4", "");
+            String coverUrl = movieCoverService.fetchMovieCover(movieName);
+            if (coverUrl != null) {
+                video.setImg(coverUrl);
+                videoRepository.save(video);
+            } else {
+                log.error("No se pudo obtener la portada de la película: {}", movieName);
+                log.info("Generando portada desde el video: {}", movieName);
+                String coverImagePath = covertGenerate.generateCoverFromVideo(video);
+                if (coverImagePath != null) {
+                    log.info("Portada generada en: {}", coverImagePath);
+                    video.setImg(coverImagePath);
+                    videoRepository.save(video);
+                } else {
+                    log.error("No se pudo generar la portada de la película: {}", movieName);
+                }
+            }
+        }
     }
 }
