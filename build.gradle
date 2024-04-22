@@ -5,10 +5,10 @@ plugins {
 }
 
 group = 'com.lxdevelop'
-version = '0.0.1'
+version = '0.1.1'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '17'
 }
 
 configurations {
@@ -31,6 +31,8 @@ dependencies {
     //sqlite
     implementation 'org.xerial:sqlite-jdbc:3.45.2.0'
     implementation 'org.hibernate.orm:hibernate-community-dialects:6.4.4.Final'
+    //OKHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -18,4 +18,5 @@ public class Video {
     private Long id;
     private String name;
     private String path;
+    private String img;
 }

@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### peliculas y media ###
+/media/
+/covers/
