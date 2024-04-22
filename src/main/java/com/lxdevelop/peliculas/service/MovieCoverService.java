@@ -2,6 +2,7 @@ package com.lxdevelop.peliculas.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lxdevelop.peliculas.utils.ConfigReader;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class MovieCoverService {
     private final Logger log = LoggerFactory.getLogger(MovieCoverService.class);
-    private static final String API_KEY = System.getenv("TMDB_API_KEY");
+    private static final String API_KEY = new ConfigReader().getApiKey();
     private static final String BASE_URL = "https://api.themoviedb.org/3/search/movie?";
 
     public String fetchMovieCover(String movieName) {
