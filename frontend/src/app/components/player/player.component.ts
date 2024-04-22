@@ -10,8 +10,10 @@ import { Video } from '../../classes/video';
   styleUrl: './player.component.scss'
 })
 export class PlayerComponent implements OnInit {
-  public videoID: string;
-  public video: Video
+  videoID: string;
+  video: Video
+
+  videosrc: string
 
   constructor(
     private route: ActivatedRoute,
@@ -26,5 +28,6 @@ export class PlayerComponent implements OnInit {
 
   async getVideo() {
     this.video = await this.VideoService.getVideo(parseInt(this.videoID));
+    this.videosrc = `http://localhost:8080/api/stream2/${this.video.id}`
   }
 }

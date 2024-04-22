@@ -1,6 +1,12 @@
 <h3>aca pondre el reproductor</h3>
 <h2>reproduciendo la pelicula con el id {{videoID}} y de noombre {{video.name}}</h2>
 
-<video>
-    <source src="localhost:8080/api/stream2/{{video.id}}" type="video/mp4">    
+<video *ngIf="video.id" id="videoplayer" class="video-js" controls preload="auto" width="640" height="264"
+    data-setup="{}">
+    <source src="{{videosrc}}"/>
+    <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
 </video>
