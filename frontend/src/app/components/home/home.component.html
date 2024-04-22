@@ -1,23 +1,11 @@
 <div class="container">
+    @for (video of videos;track video.id) {
     <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
+        <img (click)="printInfo(video)" src="{{video.img}}" alt="{{video.name}}">
     </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
+    } @empty {
+    <div>
+        <h3>Sin peliculas</h3>
     </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
-    </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
-    </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
-    </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
-    </div>
-    <div class="card">
-        <img src="https://m.media-amazon.com/images/M/MV5BNzhkN2RiMmEtNGYxOS00ZTBmLThmOTItMWYxZGIzNzYwODhlXkEyXkFqcGdeQXVyMTYzMDUzNjEw._V1_.jpg" alt="cover">
-    </div>
+    }
 </div>
