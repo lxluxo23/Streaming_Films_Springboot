@@ -47,7 +47,14 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        if (mediaDir.exists() && mediaDir.isDirectory()) {
+        if (!mediaDir.exists()) {
+            boolean dirCreated = mediaDir.mkdir();
+            if (!dirCreated) {
+                log.error("No se pudo crear el directorio: {}", mediaDir.getAbsolutePath());
+                return;
+            }
+        }
+        if (mediaDir.isDirectory()) {
             File[] files = mediaDir.listFiles((dir, name) -> VideoFormat.isSupported(name));
             if (files != null) {
                 for (File file : files) {
