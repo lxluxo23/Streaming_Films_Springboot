@@ -12,10 +12,18 @@ export class VideoService {
 
   getVideos = async () => {
     try {
-        return (await axios.get(`${environment.apiUrl}api/videos`)).data;
+      return (await axios.get(`${environment.apiUrl}api/videos`)).data;
     } catch (error) {
-        console.error('Error al obtener los videos:', error);
-        throw error;
+      console.error('Error al obtener los videos:', error);
+      throw error;
     }
-};
+  };
+  getVideo = async (id: number) => {
+    try {
+      return (await axios.get(`${environment.apiUrl}api/videos/${id}`)).data;
+    } catch (error) {
+      console.error('Error al obtener el video:', error);
+      throw error;
+    }
+  }
 }

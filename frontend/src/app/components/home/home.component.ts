@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { Video } from '../../classes/video';
 import { VideoService } from './../../services/video.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -7,13 +9,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
+  videos: Video[] = [];
 
-  constructor(private VideoService: VideoService){
+  constructor(
+    private VideoService: VideoService,
+    private router: Router
+  ) {
 
   }
   async ngOnInit() {
-    let res = await this.VideoService.getVideos();
-    console.log(res);
+    this.videos = await this.VideoService.getVideos();
+
   }
 
+  printInfo(video: Video) {
+    this.router.navigate(['/reproductor', video.id]);
+  }
 }

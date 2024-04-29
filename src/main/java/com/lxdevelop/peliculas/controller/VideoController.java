@@ -10,21 +10,22 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
-@RequestMapping("/api/videos")
+@RequestMapping("/api")
 
 public class VideoController {
 
     @Autowired
     private VideoService videoService;
 
-    @GetMapping
+    @GetMapping("/videos")
     public ResponseEntity<List<Video>> listVideos() {
         List<Video> videos = videoService.listAllVideos();
         return ResponseEntity.ok(videos);
     }
 
-
-
-
+    @GetMapping("videos/{id}")
+    public Video getVideoById(@PathVariable Long id) {
+        return videoService.findVideoById(id);
+    }
 
 }
